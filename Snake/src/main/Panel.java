@@ -72,7 +72,7 @@ public class Panel extends JPanel {
 		drawGrid(g);
 		
 		//apple
-		if(chance <= 75) {
+		if(chance <= 10) {
 			golden_apple.update();
 			golden_apple.draw(g);
 		}

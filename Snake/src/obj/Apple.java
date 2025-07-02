@@ -28,6 +28,12 @@ public class Apple {
 		if(panel.getPlayer().getX(0) == this.x && panel.getPlayer().getY(0) == this.y) {
 			panel.getPlayer().grow();
 			newApple();
+			for(int i=0;i<panel.getPlayer().getBodyParts();i++) {
+				if(this.x == panel.getPlayer().getX(i) && this.y == panel.getPlayer().getY(i)) {
+					newApple();
+					break;
+				}
+			}
 			System.out.println("Score: " + panel.getPlayer().getScore());
 		}
 	}

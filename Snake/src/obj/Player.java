@@ -91,7 +91,9 @@ public class Player {
 	public int getScore() {
 		return this.score;
 	}
-	
+	public int getBodyParts() {
+		return this.body_parts;
+	}
 	//setters
 	public void setDirection(char dir) {
 		if(this.direction == 'U' && dir == 'D' ||
