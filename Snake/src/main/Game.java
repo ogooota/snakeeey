@@ -1,5 +1,7 @@
 package main;
 
+
+
 import javax.swing.JOptionPane;
 
 public class Game implements Runnable {
@@ -7,6 +9,7 @@ public class Game implements Runnable {
 	private Panel panel;
 	private Window window;
 	private Thread thread;
+	
 	private boolean isRunning;
 	private final int fps_alvo = 120;
 	private final int DELAY = 140;
@@ -43,6 +46,12 @@ public class Game implements Runnable {
 				if(System.currentTimeMillis() - delayTick >= DELAY) {
 					this.panel.getPlayer().update();
 					this.panel.getPlayer().move();
+					if(panel.isGolden()) {
+						panel.getGoldenApple().update();
+					}
+					else {
+						panel.getApple().update();
+					}
 					if(this.panel.getPlayer().checkSelfCollision()) {
 						JOptionPane.showMessageDialog(panel, "You hit yourself! Game over.", "Game over.", 0);
 						stopGameLoop();

@@ -12,6 +12,7 @@ public class Apple {
 	protected Panel panel;
 	protected int x;
 	protected int y;
+	protected int chance;
 	
 	public Apple(Panel panel) {
 		this.panel = panel;
@@ -20,6 +21,7 @@ public class Apple {
 	}
 	
 	public void newApple() {
+		chance = rand.nextInt(100);
 		this.x = rand.nextInt(panel.getAmountOfSquaresX()) * panel.getUnitSize();
 		this.y = rand.nextInt(panel.getAmountOfSquaresY()) * panel.getUnitSize();
 	}
@@ -41,5 +43,16 @@ public class Apple {
 	public void draw(Graphics g) {
 		g.setColor(Color.red);
 		g.fillRect(this.x, this.y, panel.getUnitSize(), panel.getUnitSize());
+	}
+	
+	//getters
+	public int getX() {
+		return this.x;
+	}
+	public int getY() {
+		return this.y;
+	}
+	public int getChance( ) {
+		return this.chance;
 	}
 }

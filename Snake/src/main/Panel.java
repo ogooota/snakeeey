@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.Random;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import inputs.Keyboard;
 import obj.Apple;
@@ -29,6 +30,7 @@ public class Panel extends JPanel {
 	protected Player player;
 	protected Apple apple;
 	protected GoldenApple golden_apple;
+	protected boolean isGolden;
 	protected Random rand;
 	protected int chance;
 	
@@ -41,7 +43,7 @@ public class Panel extends JPanel {
 		apple = new Apple(this);
 		golden_apple = new GoldenApple(this);
 		rand = new Random();
-		chance = rand.nextInt(100);
+		chance = apple.getChance();
 	}
 	
 
@@ -72,12 +74,12 @@ public class Panel extends JPanel {
 		drawGrid(g);
 		
 		//apple
-		if(chance <= 10) {
-			golden_apple.update();
+		if(chance <= 75) {
+			isGolden=true;
 			golden_apple.draw(g);
 		}
 		else {
-			apple.update();
+			isGolden=false;
 			apple.draw(g);
 		}
 		
@@ -105,5 +107,11 @@ public class Panel extends JPanel {
 	public Apple getApple() {
 		return apple;
 	}
+	public GoldenApple getGoldenApple() {
+		return golden_apple;
+	}
 	
+	public boolean isGolden() {
+		return isGolden;
+	}
 }

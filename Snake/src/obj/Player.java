@@ -2,7 +2,11 @@ package obj;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.IllegalFormatWidthException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
+
+import javax.swing.Timer;
 
 import main.Panel;
 
@@ -14,6 +18,8 @@ public class Player {
 	private int body_parts;
 	private int score;
 	private char direction;
+	private Color head_color;
+	private Color body_color;
 	
 	public Player(Panel panel) {
 		this.panel = panel;
@@ -22,6 +28,8 @@ public class Player {
 		this.body_parts = 3;
 		this.score = 0;
 		this.direction = 'R';
+		this.head_color = Color.green;
+		this.body_color = new Color(0, 100, 0);
 	}
 	
 	public void move() {
@@ -49,11 +57,11 @@ public class Player {
 	public void draw(Graphics g) {
 		for(int i=0;i<body_parts;i++) {
 			if(i == 0) {
-				g.setColor(Color.green);
+				g.setColor(head_color);
 				g.fillRect(this.x[i], this.y[i], panel.getUnitSize(), panel.getUnitSize());
 			}
 			else {
-				g.setColor(new Color(0,100,0));
+				g.setColor(body_color);
 				g.fillRect(this.x[i], this.y[i], panel.getUnitSize(), panel.getUnitSize());				
 			}
 		}
@@ -62,7 +70,35 @@ public class Player {
 		this.score++;
 		this.body_parts++;
 	}
-
+	
+	public void activateRainbowMode() {
+		
+		
+		ActionListener tarefa = new ActionListener() {	
+			int seconds = 0;
+			Random rand = new Random();
+			Color color, color2;
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Modo rainbow ativado! " + seconds);
+				for(int i=0;i<panel.getPlayer().getBodyParts();i++) {
+					color = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+					color2 = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+					setSnakeColor(color, color2);
+					if(seconds >= 40000) {
+						break;
+					}
+					seconds+=300;
+				
+				}		
+			}
+		};
+		
+		Timer timer = new Timer(100, tarefa);
+		timer.start();
+	}
+	
+	
+	
 	public boolean checkWallCollisions() {
 		if(this.x[0] >= panel.getWidth() || this.x[0] < 0) {
 			return true;
@@ -105,5 +141,9 @@ public class Player {
 			return;
 		}
 		this.direction = dir;
+	}
+	public void setSnakeColor(Color color, Color color2) {
+		this.head_color = color;
+		this.body_color = color2;
 	}
 }
