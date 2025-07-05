@@ -3,15 +3,14 @@ package main;
 import javax.swing.JFrame;
 
 public class Window {
-	private Panel panel;
 	private JFrame frame;
-	private final String title = "The Snake";
+	private Panel panel;
+	private final String title = "Snake";
 	
 	public Window(Panel panel) {
 		this.panel = panel;
 		createWindow();
 	}
-	
 	public void createWindow() {
 		frame = new JFrame(title);
 		frame.add(panel);

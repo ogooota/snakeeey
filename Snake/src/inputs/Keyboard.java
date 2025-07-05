@@ -1,4 +1,4 @@
-package inputs;
+ package inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -6,11 +6,16 @@ import java.awt.event.KeyListener;
 import main.Panel;
 
 public class Keyboard implements KeyListener {
-	private Panel panel;
+	private Panel panel; 
+	private char UP, DOWN, LEFT, RIGHT;
+	
 	
 	public Keyboard(Panel panel) {
 		this.panel = panel;
-		
+		this.UP = 'U';
+		this.DOWN = 'D';
+		this.LEFT = 'L';
+		this.RIGHT = 'R';
 	}
 
 	@Override
@@ -21,24 +26,22 @@ public class Keyboard implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_P) {
-			panel.getApple().newApple();
-			System.out.println("New apple generated!");
-		}
 		switch(e.getKeyCode()) {
-			case KeyEvent.VK_W:
-				panel.getPlayer().setDirection('U');
-				break;
-			case KeyEvent.VK_A:
-				panel.getPlayer().setDirection('L');
-				break;
-			case KeyEvent.VK_S:
-				panel.getPlayer().setDirection('D');
-				break;
-			case KeyEvent.VK_D:
-				panel.getPlayer().setDirection('R');
-				break;
+		case KeyEvent.VK_W:
+			panel.getPlayer().setDirection(UP);
+			break;
+		case KeyEvent.VK_A:
+			panel.getPlayer().setDirection(LEFT);
+			break;
+		case KeyEvent.VK_S:
+			panel.getPlayer().setDirection(DOWN);
+			break;
+		case KeyEvent.VK_D:
+			panel.getPlayer().setDirection(RIGHT);
+			break;
+			
 		}
+	
 	}
 
 	@Override

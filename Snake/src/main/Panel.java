@@ -1,4 +1,4 @@
-package main;
+ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.Random;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import inputs.Keyboard;
 import obj.Apple;
@@ -15,45 +14,39 @@ import obj.Player;
 
 public class Panel extends JPanel {
 	
-	private final int width = 600;
-	private final int height = 400;
-	private final int unit_size = 25;
-	private final int area_px = width*height;
-	private final int area_squares = area_px / unit_size;
-	private final int amount_of_squares_x = width / unit_size;
-	private final int amount_of_squares_y = height / unit_size;
+	private final int width, height, unit_size, area_px, area_squares, cols, rows;
+	private Random rand;
 	
+	private final int[][] grid;
 	
-	
-	private final int[][] grid = new int[amount_of_squares_x][amount_of_squares_y];
-	
-	protected Player player;
-	protected Apple apple;
-	protected GoldenApple golden_apple;
-	protected boolean isGolden;
-	protected Random rand;
-	protected int chance;
+	private Player player;
+	private Apple apple;
+	private GoldenApple golden_apple;
+	private boolean isGolden;
+	private int golden_apple_chance;
 	
 	public Panel() {
-		setPanelSize();
-		addKeyListener(new Keyboard(this));
 		setFocusable(true);
+		this.width = 600;
+		this.height = 400;
+		this.area_px = width*height;
+		this.unit_size = 25;
+		this.area_squares = area_px / unit_size;
+		this.cols = width / unit_size;
+		this.rows = height / unit_size;
+		setPanelSize();
+		this.grid = new int[cols][rows];
+		this.player = new Player(this);
+		this.apple = new Apple(this);
+		this.golden_apple = new GoldenApple(this);
+		addKeyListener(new Keyboard(this));
+		this.golden_apple_chance = golden_apple.getRandomChance();
 		
-		player = new Player(this);
-		apple = new Apple(this);
-		golden_apple = new GoldenApple(this);
-		rand = new Random();
-		chance = apple.getChance();
+	}
+	public void setRandomChance() {
+		this.golden_apple_chance = golden_apple.getRandomChance();
 	}
 	
-
-	public void setPanelSize() {
-		Dimension d = new Dimension(width,height);
-		setPreferredSize(d);
-		setMaximumSize(d);
-		setMinimumSize(d);
-	}
-
 	public void drawGrid(Graphics g) {
 		for(int k=0;k<grid.length;k++) {
 			for(int i=0;i<grid[0].length;i++) {
@@ -61,6 +54,13 @@ public class Panel extends JPanel {
 				g.drawRect(k*unit_size, i*unit_size, unit_size, unit_size);
 			}
 		}
+	}
+	
+	public void setPanelSize() {
+		Dimension d = new Dimension(width, height);
+		setPreferredSize(d);
+		setMaximumSize(d);
+		setMinimumSize(d);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -73,45 +73,48 @@ public class Panel extends JPanel {
 		//grid
 		drawGrid(g);
 		
+		//player
+		player.draw(g);
+		
 		//apple
-		if(chance <= 75) {
-			isGolden=true;
+		if(golden_apple_chance <= 15) {
+			isGolden = true;
 			golden_apple.draw(g);
 		}
 		else {
-			isGolden=false;
+			isGolden = false;
 			apple.draw(g);
 		}
 		
-		//player
-		player.draw(g);
 		
 	}
 	
 	//getters
-	public int getUnitSize() {
-		return unit_size;
+	public int getGoldenAppleChance() {
+		return golden_apple_chance;
+	}
+	public boolean isGolden() {
+		return this.isGolden;
+	}
+	public GoldenApple getGoldenApple() {
+		return this.golden_apple;
 	}
 	public int getAreaInSquares() {
 		return area_squares;
 	}
-	public int getAmountOfSquaresX() {
-		return amount_of_squares_x;
-	}
-	public int getAmountOfSquaresY() {
-		return amount_of_squares_y;
+	public Apple getApple() {
+		return this.apple;
 	}
 	public Player getPlayer() {
-		return player;
+		return this.player;
 	}
-	public Apple getApple() {
-		return apple;
+	public int getUnitSize() {
+		return this.unit_size;
 	}
-	public GoldenApple getGoldenApple() {
-		return golden_apple;
+	public int getCols() {
+		return this.cols;
 	}
-	
-	public boolean isGolden() {
-		return isGolden;
+	public int getRows() {
+		return this.rows;
 	}
 }

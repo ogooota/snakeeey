@@ -12,138 +12,168 @@ import main.Panel;
 
 public class Player {
 	
-	private Panel panel;
-	private int[] x;
-	private int[] y;
+	private int x[], y[];
 	private int body_parts;
+	private Panel panel;
 	private int score;
-	private char direction;
 	private Color head_color;
 	private Color body_color;
+	private int speed;
+	private int snake_size;
+	private char direction;
+	private Random rand;
+	private boolean isTimerActive;
 	
 	public Player(Panel panel) {
+		this.rand = new Random();
 		this.panel = panel;
 		this.x = new int[panel.getAreaInSquares()];
 		this.y = new int[panel.getAreaInSquares()];
 		this.body_parts = 3;
 		this.score = 0;
-		this.direction = 'R';
+		this.speed = panel.getUnitSize();
+		this.snake_size = panel.getUnitSize();
 		this.head_color = Color.green;
 		this.body_color = new Color(0, 100, 0);
-	}
-	
-	public void move() {
-		switch(this.direction) {
-			case 'U':
-				y[0]-=panel.getUnitSize();
-				break;
-			case 'L':
-				x[0]-=panel.getUnitSize();
-				break;
-			case 'D':
-				y[0]+=panel.getUnitSize();
-				break;
-			case 'R':
-				x[0]+=panel.getUnitSize();
-				break;
-		}
-	}
-	public void update() {
-		for(int i=body_parts;i>0;i--) {
-			x[i] = x[i-1];
-			y[i] = y[i-1];
-		}
-	}	
-	public void draw(Graphics g) {
-		for(int i=0;i<body_parts;i++) {
-			if(i == 0) {
-				g.setColor(head_color);
-				g.fillRect(this.x[i], this.y[i], panel.getUnitSize(), panel.getUnitSize());
-			}
-			else {
-				g.setColor(body_color);
-				g.fillRect(this.x[i], this.y[i], panel.getUnitSize(), panel.getUnitSize());				
-			}
-		}
-	}
-	public void grow() {
-		this.score++;
-		this.body_parts++;
+		this.direction = 'R';
 	}
 	
 	public void activateRainbowMode() {
+		final int interval = 1000;
+		final int total_seconds = 4000;
+		final int[] elapsed_time = {0};
 		
-		
-		ActionListener tarefa = new ActionListener() {	
-			int seconds = 0;
-			Random rand = new Random();
-			Color color, color2;
+		Timer timer = new Timer(100, new ActionListener() {
+			
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Modo rainbow ativado! " + seconds);
-				for(int i=0;i<panel.getPlayer().getBodyParts();i++) {
-					color = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
-					color2 = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
-					setSnakeColor(color, color2);
-					if(seconds >= 40000) {
-						break;
-					}
-					seconds+=300;
 				
-				}		
+				elapsed_time[0]+=interval;
+				isTimerActive = true;
+				
+				for(int i=1;i<256;i++) {
+					head_color = new Color(rand.nextInt(i), rand.nextInt(i), rand.nextInt(i));
+					body_color = new Color(rand.nextInt(i), rand.nextInt(i), rand.nextInt(i));
+				}
+				
+				System.out.println("Tick: " + (elapsed_time[0] / 10000) + "s");
+				
+				if (elapsed_time[0] >= total_seconds*10) {
+                    ((Timer) e.getSource()).stop();
+                    System.out.println("Timer finalizado após 4 segundos.");
+                    head_color = Color.green;
+    				body_color = new Color(0, 100, 0);
+    				isTimerActive = false;
+                }
 			}
-		};
-		
-		Timer timer = new Timer(100, tarefa);
+			
+		});
 		timer.start();
+		
 	}
-	
-	
 	
 	public boolean checkWallCollisions() {
-		if(this.x[0] >= panel.getWidth() || this.x[0] < 0) {
-			return true;
+		
+		if(isTimerActive) {
+			if(x[0] > panel.getWidth()) {
+				x[0] = 0;
+			}
+			else if(x[0] < 0) {
+				x[0] = panel.getWidth();
+			}
+			else if(y[0] > panel.getHeight()) {
+				y[0] = 0;
+			}
+			else if(y[0] < 0) {
+				y[0] = panel.getHeight();
+			}
+			return false;
 		}
-		else if(this.y[0] >= panel.getHeight() || this.y[0] < 0) {
-			return true;
+		else {
+			if(this.x[0] >= panel.getWidth() || this.y[0] >= panel.getHeight()) {
+				return true;
+			}
+			else if(this.x[0] < 0 || this.y[0] < 0) {
+				return true;
+			}
+			return false;
+			
 		}
-		return false;
 	}
+	
 	public boolean checkSelfCollision() {
-		for(int i=0;i<body_parts;i++) {
-			if(i != 0 && x[0] == x[i] && y[0] == y[i]) {
+		if(isTimerActive) {
+			return false;
+		}
+		for(int i=1;i<body_parts;i++) {
+			if(this.x[0] == this.x[i] && this.y[0] == this.y[i]) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	public void move() {
+		switch(this.direction) {
+			case 'U':
+				this.y[0]-=speed;
+				break;
+			case 'L':
+				this.x[0]-=speed;
+				break;
+			case 'D':
+				this.y[0]+=speed;
+				break;
+			case 'R':
+				this.x[0]+=speed;
+				break;
+		}
+	}
+	public void grow() {
+		this.body_parts++;
+		this.score++;
+		System.out.println("Score: " + this.score);
+	}
+	public void update() {
+		for(int i=body_parts;i>0;i--) {
+			x[i] = x[i-1];
+			y[i] = y[i-1];
+		}
+	}
+	
+	public void draw(Graphics g) {
+		for(int i=0;i<body_parts;i++) {
+			if(i == 0) {
+				g.setColor(head_color);
+				g.fillRect(this.x[i], this.y[i], snake_size, snake_size);
+			}
+			else {
+				g.setColor(body_color);
+				g.fillRect(this.x[i], this.y[i], snake_size, snake_size);
+			}
+		}
+	}
+	
 	//getters
+	public int getBodyParts() {
+		return this.body_parts;
+	}
 	public int getX(int index) {
 		return this.x[index];
 	}
 	public int getY(int index) {
 		return this.y[index];
 	}
-	public int getScore() {
-		return this.score;
-	}
-	public int getBodyParts() {
-		return this.body_parts;
-	}
+	
 	//setters
 	public void setDirection(char dir) {
-		if(this.direction == 'U' && dir == 'D' ||
+		if(this.direction == 'U' && dir == 'D' || 
 		   this.direction == 'D' && dir == 'U' ||
 		   this.direction == 'R' && dir == 'L' ||
-		   this.direction == 'L' && dir == 'R') 
-		{
-			System.out.println("Illegal direction typed.");
+		   this.direction == 'L' && dir == 'R') {
+			System.out.println("Invalid direction");
 			return;
 		}
 		this.direction = dir;
-	}
-	public void setSnakeColor(Color color, Color color2) {
-		this.head_color = color;
-		this.body_color = color2;
 	}
 }
