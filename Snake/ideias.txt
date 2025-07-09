@@ -1,0 +1,12 @@
+//GUI já foi feita, basta a lógica agora:
+- menu inicial;
+- modo speed: a cobrinha aumenta a velocidade em que anda a medida que vai comendo as maçãs;
+- modo infernal: a velocidade inicial do jogo já é 2.0x e chance de spawnar golden_apple desce para 3,5%;
+				quando o player tiver 15 maçãs, a velocidade do jogo vai para 2.5x;
+- modo normal: a velocidade do jogo é normal, e a chance de spawnar golden_apple é de 10%;
+- modo zen: a velocidade do jogo é lenta, e a chance de spawnar golden_apple é de 50%;
+
+
+//nem comecei ainda kkkkkkkk
+- skins para implementar a ideia de upgrade no jogo;
+- talvez um outro jogo de upgrade dentro do jogo da cobrinha;
