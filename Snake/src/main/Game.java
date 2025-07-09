@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.JOptionPane;
 
+import gui.GameMode;
+
 public class Game implements Runnable {
 	private Window window;
 	private Panel panel;
@@ -11,10 +13,21 @@ public class Game implements Runnable {
 	private long delayTick = System.currentTimeMillis();
 	private boolean isRunning;
 	
-	public Game() {
-		panel = new Panel();
+	public Game(GameMode mode) {
+		panel = new Panel(mode);
 		window = new Window(panel);
 		panel.requestFocus();
+		switch(mode) {
+			case GameMode.NORMAL:
+				break;
+			case GameMode.ZEN:
+				break;
+			case GameMode.SPEED:
+				break;
+			case GameMode.INFERNAL:
+				break;
+			
+		}
 		startGameLoop();
 	}
 	
@@ -22,7 +35,7 @@ public class Game implements Runnable {
 		isRunning = true;
 		thread = new Thread(this);
 		thread.start();
-	}
+	} 
 	public void stopGameLoop() {
 		isRunning = false;
 	}

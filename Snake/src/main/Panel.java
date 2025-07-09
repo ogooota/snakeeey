@@ -1,4 +1,4 @@
- package main;
+package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import gui.GameMode;
 import inputs.Keyboard;
 import obj.Apple;
 import obj.GoldenApple;
@@ -25,12 +26,27 @@ public class Panel extends JPanel {
 	private boolean isGolden;
 	private int golden_apple_chance;
 	
-	public Panel() {
-		setFocusable(true);
+	//configurando modos
+	private GameMode mode;
+	
+	public Panel(GameMode mode) {
+		requestFocus();
+		this.mode = mode;
+		this.unit_size = 25;
+		
+		if(mode == GameMode.SPEED) {
+			
+		}
+		else if(mode == GameMode.ZEN) {
+				
+		}
+		else if(mode == GameMode.INFERNAL) {
+			
+		}
+		
 		this.width = 600;
 		this.height = 400;
 		this.area_px = width*height;
-		this.unit_size = 25;
 		this.area_squares = area_px / unit_size;
 		this.cols = width / unit_size;
 		this.rows = height / unit_size;
@@ -77,7 +93,7 @@ public class Panel extends JPanel {
 		player.draw(g);
 		
 		//apple
-		if(golden_apple_chance <= 15) {
+		if(golden_apple_chance <= 10) {
 			isGolden = true;
 			golden_apple.draw(g);
 		}

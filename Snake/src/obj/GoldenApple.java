@@ -1,4 +1,4 @@
- package obj;
+package obj;
 
 import java.awt.Color;
 import java.awt.Graphics;

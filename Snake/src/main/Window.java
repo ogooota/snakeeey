@@ -11,12 +11,13 @@ public class Window {
 		this.panel = panel;
 		createWindow();
 	}
+	
 	public void createWindow() {
 		frame = new JFrame(title);
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 	}
